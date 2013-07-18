@@ -1,0 +1,180 @@
+# Webhookr::ExamplePlugin
+[![Build Status](https://travis-ci.org/gerrypower/webhookr-example_plugin.png?branch=master)](https://travis-ci.org/gerrypower/webhookr-example_plugin)
+[![Dependency Status](https://gemnasium.com/gerrypower/webhookr-example_plugin.png)](https://gemnasium.com/gerrypower/webhookr-example_plugin)
+[![Code Climate](https://codeclimate.com/repos/51e81bd356b10253cd00e367/badges/3f65f77018889c315542/gpa.png)](https://codeclimate.com/repos/51e81bd356b10253cd00e367/feed)
+[![Coverage Status](https://coveralls.io/repos/gerrypower/webhookr-example_plugin/badge.png?branch=master)](https://coveralls.io/r/gerrypower/webhookr-example_plugin?branch=master)
+
+This gem is a plugin for [Webhookr](https://github.com/zoocasa/webhookr) that enables
+your application to accept [webhooks from ExamplePlugin](http://help.example_plugin.com/entries/21738186-Introduction-to-Webhooks).
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'webhookr-example_plugin'
+
+Or install it yourself:
+
+    $ gem install webhookr-example_plugin
+
+[webhookr](https://github.com/zoocasa/webhookr) is installed as a dependency of webhookr-example_plugin. If you have not [setup Webhookr](https://github.com/zoocasa/webhookr#usage--setup), do so now:
+
+```console
+rails g webhookr:add_route
+```
+
+## Usage
+
+Once you have the gem installed run the generator to add the code to your initializer.
+An initializer will be created if you do not have one.
+
+```console
+rails g webhookr:example_plugin:init *initializer_name* -s
+```
+
+Run the generator to create an example file to handle example_plugin webhooks.
+
+```console
+rails g webhookr:example_plugin:example_hooks
+```
+
+Or create a example_plugin handler class for any event that you want to handle. For example
+to handle unsubscribes you would create a class as follows:
+
+```ruby
+class example_pluginHooks
+  def on_spam(incoming)
+    # Your custom logic goes here.
+    User.unsubscribe_newletter(incoming.payload.msg.email)
+  end
+end
+```
+
+For a complete list of events, and the payload format, see below.
+
+Edit config/initializers/*initializer_name* and change the commented line to point to
+your custom ExamplePlugin event handling class. If your class was called *ExamplePluginHooks*
+the configuration line would look like this:
+
+```ruby
+  Webhookr::ExamplePlugin::Adapter.config.callback = ExamplePluginHooks
+```
+
+To see the list of ExamplePlugin URLs your application can use when you configure
+example_plugin webhooks,
+run the provided webhookr rake task:
+
+```console
+rake webhookr:services
+```
+
+Example output:
+
+```console
+example_plugin:
+  GET	/webhookr/events/example_plugin/19xl64emxvn
+  POST	/webhookr/events/example_plugin/19xl64emxvn
+```
+
+## ExamplePlugin Events & Payload
+
+### Events
+
+All webhook events are supported. For further information on these events, see the
+[example_plugin documentation](http://help.example_plugin.com/entries/21738186-Introduction-to-Webhooks).
+
+<table>
+  <tr>
+    <th>ExamplePlugin Event</th>
+    <th>Event Handler</th>
+  </tr>
+  <tr>
+    <td>send</td>
+    <td>on_send(incoming)</td>
+  </tr>
+  <tr>
+    <td>hard_bounce</td>
+    <td>on_hard_bounce(incoming)</td>
+  </tr>
+  <tr>
+    <td>soft_bounce</td>
+    <td>on_soft_bounce(incoming)</td>
+  </tr>
+  <tr>
+    <td>open</td>
+    <td>on_open(incoming)</td>
+  </tr>
+  <tr>
+    <td>click</td>
+    <td>on_click(incoming)</td>
+  </tr>
+  <tr>
+    <td>spam</td>
+    <td>on_spam(incoming)</td>
+  </tr>
+  <tr>
+    <td>unsub</td>
+    <td>on_unsub(incoming)</td>
+  </tr>
+  <tr>
+    <td>reject</td>
+    <td>on_reject(incoming)</td>
+  </tr>
+</table>
+
+### Payload
+
+The payload is the full payload data from as per the
+[example_plugin documentation](http://help.example_plugin.com/entries/24466132-Webhook-Format), converted to an OpenStruct
+for ease of access. Examples for the method call unsubscribe:
+
+```ruby
+  incoming.payload.msg._id
+  incoming.payload.msg.ts
+  incoming.payload.msg.email
+  incoming.payload.msg.sender
+  incoming.payload.msg.subject
+  incoming.payload.msg.opens
+  incoming.payload.msg.tags
+  incoming.payload.msg.state
+  incoming.payload.msg.diag
+  incoming.payload.msg.bounce_description
+  incoming.payload.msg.template
+
+```
+
+### <a name="supported_services"></a>Supported Service - example_plugin
+
+* [http://help.example_plugin.com/entries/21738186-Introduction-to-Webhooks](example_plugin - v1.0)
+
+## <a name="works_with"></a>Works with:
+
+webhookr-example_plugin works with Rails 3.1, 3.2 and 4.0, and has been tested on the following Ruby
+implementations:
+
+* 1.9.3
+* 2.0.0
+* jruby-19mode
+
+### Versioning
+This library aims to adhere to [Semantic Versioning 2.0.0](http://semver.org/). Violations of this scheme should be reported as
+bugs. Specifically, if a minor or patch version is released that breaks backward compatibility, that
+version should be immediately yanked and/or a new version should be immediately released that restores
+compatibility. Breaking changes to the public API will only be introduced with new major versions. As a
+result of this policy, once this gem reaches a 1.0 release, you can (and should) specify a dependency on
+this gem using the [Pessimistic Version Constraint](http://docs.rubygems.org/read/chapter/16#page74) with
+two digits of precision. For example:
+
+    spec.add_dependency 'webhookr-example_plugin', '~> 1.0'
+
+While this gem is currently a 0.x release, suggestion is to require the exact version that works for your code:
+
+    spec.add_dependency 'webhookr-example_plugin', '0.0.1'
+
+## License
+
+webhookr-example_plugin is released under the [MIT license](http://www.opensource.org/licenses/MIT).
+
+## Author
+
+* [Gerry Power](https://github.com/gerrypower)
