@@ -1,8 +1,8 @@
 # Webhookr::ExamplePlugin
-[![Build Status](https://travis-ci.org/gerrypower/webhookr-example_plugin.png?branch=master)](https://travis-ci.org/gerrypower/webhookr-example_plugin)
+[![Build Status](https://travis-ci.org/gerrypower/webhookr-example_plugin.svg?branch=master)](https://travis-ci.org/gerrypower/webhookr-example_plugin)
 [![Dependency Status](https://gemnasium.com/gerrypower/webhookr-example_plugin.png)](https://gemnasium.com/gerrypower/webhookr-example_plugin)
-[![Code Climate](https://codeclimate.com/repos/51e8487b56b10253cd012512/badges/07b88d092c3cbc9a3873/gpa.png)](https://codeclimate.com/repos/51e8487b56b10253cd012512/feed)
-[![Coverage Status](https://coveralls.io/repos/gerrypower/webhookr-example_plugin/badge.png)](https://coveralls.io/r/gerrypower/webhookr-example_plugin)
+[![Code Climate](https://codeclimate.com/github/gerrypower/webhookr-example_plugin/badges/gpa.svg)](https://codeclimate.com/github/gerrypower/webhookr-example_plugin)
+[![Coverage Status](https://coveralls.io/repos/gerrypower/webhookr-example_plugin/badge.svg?branch=master)](https://coveralls.io/r/gerrypower/webhookr-example_plugin?branch=master)
 
 This gem is a plugin for [Webhookr](https://github.com/zoocasa/webhookr) that enables
 your application to accept [webhooks from ExamplePlugin](http://help.example_plugin.com/entries/21738186-Introduction-to-Webhooks).
